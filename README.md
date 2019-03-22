@@ -12,6 +12,7 @@ Most of the commits in this repository correspond to videos in the program.
 ## About
 
 This project has been modified by [me](https://github.com/vinicius98s) and this is what looks like:
+
 ![Twitter clone](./default.jpg)
 
 ## License
