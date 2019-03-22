@@ -4,15 +4,25 @@ import { formatTweet, formatDate } from '../utils/helpers'
 import { TiArrowBackOutline } from 'react-icons/ti'
 import { TiHeartOutline } from 'react-icons/ti'
 import { TiHeartFullOutline } from 'react-icons/ti'
+import { handleToggleLike } from '../actions/tweets'
+import { Link, withRouter } from 'react-router-dom'
 
 class Tweet extends React.Component {
     toParent = (e, id) => {
         e.preventDefault()
-        //todo redirect to parent
+        this.props.history.push(`/tweet/${id}`)
     }
 
     handleLike = (e) => {
         e.preventDefault()
+
+        const { dispatch, tweet, authedUser } = this.props
+
+        dispatch(handleToggleLike({
+            id: tweet.id,
+            hasLiked: tweet.hasLiked,
+            authedUser
+        }))
     }
 
     render() {
@@ -25,7 +35,8 @@ class Tweet extends React.Component {
             hasLiked,
             likes,
             replies,
-            parent
+            parent,
+            id
         } = tweet
 
         if(!tweet) {
@@ -35,7 +46,7 @@ class Tweet extends React.Component {
         }
 
         return (
-            <div className='tweet'>
+            <Link to={`/tweet/${id}`} className='tweet'>
                 <img src={avatar} alt={`Avatar of ${name}`} className='avatar' />
                 <div className="tweet-info">
                     <div>
@@ -46,7 +57,7 @@ class Tweet extends React.Component {
                                 Replying to @{parent.author}
                             </button>
                         )}
-                        <p>{text}</p> 
+                        <p>{text}</p>
                     </div>
                     <div className="tweet-icons">
                         <TiArrowBackOutline className='tweet-icon' />
@@ -60,7 +71,7 @@ class Tweet extends React.Component {
                         <span>{likes !== 0 && likes}</span>
                     </div>
                 </div>
-            </div>
+            </Link>
         )
     }
 }
@@ -77,4 +88,4 @@ function mapStateToProps({ authedUser, users, tweets }, { id }) {
     }
 }
 
-export default connect(mapStateToProps)(Tweet)
+export default withRouter(connect(mapStateToProps)(Tweet))
